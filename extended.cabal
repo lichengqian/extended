@@ -1,0 +1,53 @@
+name:                extended
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            https://github.com/MadailicaiTech/extended#readme
+license:             BSD3
+license-file:        LICENSE
+author:              li ming
+maintainer:          example@example.com
+copyright:           2016 Author name here
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Extended.Control.Lens
+                       Extended.Control.Concurrent
+                       Extended.Control.Eff
+                       Extended.Control.Eff.Lift
+                       Extended.Control.Eff.Operational
+                       Extended.Control.Eff.Reader.Strict
+                       Extended.Control.Eff.State.Strict
+                       Extended.Control.Monad.Logger
+                       Extended.Data.Aeson
+                       Extended.Data.Word
+                       Extended.Language.Haskell.TH
+                       Extended.Network.Socket
+                       Extended.System.Exit
+  build-depends:       base >= 4.7 && < 5
+                     , aeson
+                     , async
+                     , bytestring
+                     , containers
+                     , data-dword
+                     , exceptions
+                     , extensible-effects
+                     , formatting
+                     , lens
+                     , lens-aeson
+                     , monad-logger
+                     , mtl
+                     , network
+                     , string-conv
+                     , template-haskell
+                     , text
+                     , thyme
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/MadailicaiTech/extended
