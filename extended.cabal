@@ -13,6 +13,10 @@ build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
 
+flag no_trace
+  description: disable trace
+  default:    False
+
 library
   hs-source-dirs:      src
   exposed-modules:     Extended.Control.Lens
@@ -25,6 +29,7 @@ library
                        Extended.Control.Monad.Logger
                        Extended.Data.Aeson
                        Extended.Data.Word
+                       Extended.Debug.Trace
                        Extended.Language.Haskell.TH
                        Extended.Network.Socket
                        Extended.System.Exit
@@ -42,11 +47,14 @@ library
                      , monad-logger
                      , mtl
                      , network
+                     , NoTrace
                      , string-conv
                      , template-haskell
                      , text
                      , thyme
   default-language:    Haskell2010
+  if flag(no_trace)
+    cpp-options: -DNO_TRACE
 
 source-repository head
   type:     git
