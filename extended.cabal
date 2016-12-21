@@ -56,6 +56,7 @@ library
                      , template-haskell
                      , text
                      , thyme
+                     , unordered-containers
   default-language:    Haskell2010
   if flag(no_trace)
     cpp-options: -DNO_TRACE
