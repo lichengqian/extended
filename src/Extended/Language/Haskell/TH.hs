@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Extended.Language.Haskell.TH (
     module X
   , debugQ
@@ -5,8 +6,12 @@ module Extended.Language.Haskell.TH (
   , tupleType
   , simpleClause
   , simpleFunDec
+  , liftQ
+  , liftClassQ
     ) where
 
+import           Control.Monad
+import qualified Control.Monad.Trans as Trans
 import           Language.Haskell.TH as X
 
 debugQ :: (Show a, Ppr a) => Q a -> IO ()
@@ -32,3 +37,26 @@ simpleFunDec n t qe = do
 
 simpleClause :: ExpQ -> ClauseQ
 simpleClause expq = clause [] (normalB expq) []
+
+fromArrowT (AppT (AppT ArrowT t1) t2) = t1 : fromArrowT t2
+fromArrowT t                          = [t]
+
+-- f a = lift (f a)
+liftQ :: Name -> Type -> DecQ
+liftQ n t = do
+    args <- replicateM nargs $ newName "p"
+    funD n [clause (fmap varP args) (body args) []]
+    where
+        body args = normalB (appE [| Trans.lift |] $ appsE (fmap varE args))
+        nargs = length (fromArrowT t) - 1
+
+liftClassQ :: Name -> DecsQ
+liftClassQ n = do
+    ClassI (ClassD _ _ _ _ funs) _ <- reify n
+    concat <$> mapM f funs
+    where
+        f (SigD n t) = do
+            d <- liftQ n t
+            i <- pragInlD n Inline FunLike AllPhases
+            return [i, d]
+        f _ = return []
