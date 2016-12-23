@@ -8,11 +8,13 @@ module Extended.Language.Haskell.TH (
   , simpleFunDec
   , liftQ
   , liftClassQ
+  , liftReaderT
     ) where
 
 import           Control.Monad
-import qualified Control.Monad.Trans as Trans
-import           Language.Haskell.TH as X
+import           Control.Monad.Reader
+import qualified Control.Monad.Trans  as Trans
+import           Language.Haskell.TH  as X
 
 debugQ :: (Show a, Ppr a) => Q a -> IO ()
 debugQ q = do
@@ -60,3 +62,13 @@ liftClassQ n = do
             i <- pragInlD n Inline FunLike AllPhases
             return [i, d]
         f _ = return []
+
+-- [ (AppT (ConT GHC.Show.Show) (AppT (AppT (ConT Control.Monad.Trans.Reader.ReaderT) (VarT a_1)) (VarT m_0))) []]
+liftReaderT :: Name -> DecsQ
+liftReaderT n = do
+    let m = mkName "m"
+        a = varT $ mkName "a"
+        ctx = [AppT (ConT n) (VarT m)]
+        readerT = [t| $(conT n) (ReaderT $a $(varT m)) |]
+    d <- InstanceD Nothing ctx <$> readerT <*> liftClassQ n
+    return [d]
