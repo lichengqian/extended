@@ -61,6 +61,19 @@ library
   if flag(no_trace)
     cpp-options: -DNO_TRACE
 
+test-suite extended-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      tests
+  main-is:             Test.hs
+  build-depends:        base
+                      , bytestring
+                      , aeson
+                      , extended
+                      , hspec
+                      , QuickCheck
+                      , mtl
+                      , text
+
 source-repository head
   type:     git
   location: https://github.com/MadailicaiTech/extended
