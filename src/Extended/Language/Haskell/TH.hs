@@ -49,7 +49,7 @@ liftQ n t = do
     args <- replicateM nargs $ newName "p"
     funD n [clause (fmap varP args) (body args) []]
     where
-        body args = normalB (appE [| Trans.lift |] $ appsE (fmap varE args))
+        body args = normalB (appE [| Trans.lift |] $ appsE (varE n : fmap varE args))
         nargs = length (fromArrowT t) - 1
 
 liftClassQ :: Name -> DecsQ
