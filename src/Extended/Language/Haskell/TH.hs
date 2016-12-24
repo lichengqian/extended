@@ -50,7 +50,6 @@ fromArrowT t                          = [t]
 -- f a = lift (f a)
 liftQ :: Name -> Type -> DecQ
 liftQ n t = do
-    reportWarning $ show (t, nargs)
     args <- replicateM nargs $ newName "p"
     funD n [clause (fmap varP args) (body args) []]
     where
