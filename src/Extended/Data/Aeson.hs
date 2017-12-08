@@ -8,7 +8,7 @@ module Extended.Data.Aeson (
 import           Data.Aeson           as X
 import           Data.Aeson.Casing    as X
 import           Data.Aeson.Lens      as X
-import           Data.Aeson.Types
+import           Data.Aeson.Types hiding (parseField)
 import           Data.Aeson.Unit      as X
 import           Data.Aeson.WithField as X
 import qualified Data.HashMap.Strict  as M
